@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import re
+import asyncio
 
 # Configuration des intents
 intents = discord.Intents.default()
@@ -37,58 +38,69 @@ def parser_commande(commande):
     return type_arme, matches
 
 def calculer_somme_et_effet(resultats, type_arme):
-    global CAS1
-
-    # Définir le dictionnaire 'effets' AVANT de l'utiliser
-    effets = {
-        'C': {1: CAS1, 2: CAS2, 3: CAS3, 4: CAS4, 5: CAS5, 6: CAS6, 7: CAS7},
-        'M': {1: CAS1, 2: CAS2, 3: CAS3, 4: CAS4, 5: CAS5, 6: CAS6, 7: CAS7},
-        'D': {1: CAS1, 2: CAS2, 3: CAS3, 4: CAS4, 5: CAS6, 6: CAS6D, 7: CAS7}
-    }
+    global CAS2, CAS3, CAS4, CAS5, CAS6, CAS7
 
     nb_etoiles = resultats.count('⛤')
     nb_tetes_de_mort = resultats.count('☠')
 
+    effets = {
+        'C': {2: CAS2, 3: CAS3, 4: CAS4, 5: CAS5, 6: CAS6, 7: CAS7},
+        'M': {2: CAS2, 3: CAS3, 4: CAS4, 5: CAS5, 6: CAS6, 7: CAS7},
+        'D': {2: CAS2, 3: CAS3, 4: CAS4, 5: CAS5}
+    }
+
     if nb_etoiles > nb_tetes_de_mort:
         valeur_symboles = 4
         nb_symboles_restants = nb_etoiles - nb_tetes_de_mort
-        max_cas = max(effets[type_arme].keys())
-        nb_symboles_restants = min(nb_symboles_restants, max_cas)
         symboles_restants = ['⛤'] * nb_symboles_restants
-        CAS1 = 'Vous avez gagné 4 touches !'
+        if nb_symboles_restants == 1:
+            effet = "Vous avez gagné 4 touches !"
+            partie = "Attaquant"
+        else:
+            effet = effets[type_arme].get(nb_symboles_restants, "")
+            partie = "Défenseur"
     elif nb_tetes_de_mort > nb_etoiles:
         valeur_symboles = -2
         nb_symboles_restants = nb_tetes_de_mort - nb_etoiles
-        max_cas = max(effets[type_arme].keys())
-        nb_symboles_restants = min(nb_symboles_restants, max_cas)
         symboles_restants = ['☠'] * nb_symboles_restants
-        CAS1 = 'Vous avez perdu 2 touches et votre adversaire en a gagné 1'
+        if nb_symboles_restants == 1:
+            effet = "Vous avez perdu 2 touches et votre adversaire en a gagné 1"
+            partie = "Attaquant"
+        else:
+            effet = effets[type_arme].get(nb_symboles_restants, "")
+            partie = "Attaquant"
     else:
         valeur_symboles = 0
         symboles_restants = []
         nb_symboles_restants = 0
+        effet = ""
+        partie = ""
 
     somme_numerique = sum(r for r in resultats if isinstance(r, int))
     total = somme_numerique + valeur_symboles
 
-    if nb_etoiles > nb_tetes_de_mort and nb_symboles_restants > 0:
-        effet = effets[type_arme].get(nb_symboles_restants, '')
-        partie = "Défenseur"
-    elif nb_tetes_de_mort > nb_etoiles and nb_symboles_restants > 0:
-        effet = effets[type_arme].get(nb_symboles_restants, '')
-        partie = "Attaquant"
-    else:
-        effet = ''
-        partie = ''
-
     return total, symboles_restants, effet, partie
+
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user}')
 
-@bot.command(name='roll')
-async def roll(ctx, *, commande: str):
+@bot.command(name='purge')
+async def purge(ctx, nombre: int = 30):
+    # Remplacez 123456789012345678 par VOTRE_ID_DISCORD
+    if ctx.author.id != 123456789012345678:
+        await ctx.send("❌ Vous n'avez pas la permission d'utiliser cette commande.")
+        return
+
+    await ctx.channel.purge(limit=nombre + 1)
+    message = await ctx.send(f"✅ {nombre} messages ont été supprimés.")
+    await asyncio.sleep(3)
+    await message.delete()
+
+
+@bot.command(name='r')
+async def r(ctx, *, commande: str):
     try:
         type_arme, matches = parser_commande(commande)
         resultats = []
@@ -100,11 +112,16 @@ async def roll(ctx, *, commande: str):
 
         # Messages personnalisés en fonction du nom d'utilisateur
         username = ctx.author.display_name
-        if username == "Lightbringer":
-            message = f"Le Grand Architecte de l'Univers {username} a lancé {commande}\n"
-        elif username == "UN-AUTRE-NOM":
-            message = f"UN-AUTRE-TEXTE  {username} a lancé {commande}\n"
-        
+        if username == "Blockyaward":
+            message = f"Le grand {username} a lancé {commande}\n"
+        elif username == "Lightbringer":
+            message = f"Le Grand Architecte de l'Univers  {username} a lancé {commande}\n"
+        elif username == "𒆜ʟ'ǟʀʀǟɮɛ 𒆜":
+            message = f"Le beau gosse (de loin)   {username} a lancé {commande}\n"
+        elif username == "Karmouna00":
+            message = f"Le clochard   {username} a lancé {commande}\n"
+        elif username == "esprit-fetide":
+            message = f"{username} au cerveau mou, a lancé {commande}\n"
         else:
             message = f"{username} a lancé {commande}\n"
 
