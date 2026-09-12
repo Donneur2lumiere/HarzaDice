@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>HarzaDice</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'DejaVu Sans', sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 8px;
+  }
+  .barre-arme {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .barre-arme label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .barre-arme select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #2c2c2c;
+    color: #fff;
+    font-size: 14px;
+  }
+  .des-container {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .de-btn {
+    flex: 1;
+    min-height: 80px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: transform 0.1s;
+  }
+  .de-btn:active { transform: scale(0.95); }
+  .de-btn .libelle { font-size: 13px; }
+  .de-btn .compteur { font-size: 20px; font-weight: bold; }
+  .actions {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .action-btn {
+    flex: 1;
+    min-height: 50px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: transform 0.1s;
+  }
+  .action-btn:active { transform: scale(0.97); }
+  .lancer-btn { background: #16a085; }
+  .oubli-btn { background: #7f8c8d; }
+  .resultats {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+  }
+  #total {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  #symboles {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  #detail {
+    font-size: 18px;
+    color: #bbb;
+    word-wrap: break-word;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  #effet {
+    font-size: 14px;
+    font-weight: bold;
+    word-wrap: break-word;
+    line-height: 1.4;
+  }
+  .effet-defenseur { color: #27ae60; }
+  .effet-attaquant { color: #e74c3c; }
+  .effet-erreur { color: #f39c12; }
+</style>
+</head>
+<body>
+
+  <div class="barre-arme">
+    <label for="type-arme">Type d'arme :</label>
+    <select id="type-arme">
+      <option value="C">C (Courte)</option>
+      <option value="M">M (Moyenne)</option>
+      <option value="D">D (Distante)</option>
+    </select>
+  </div>
+
+  <div class="des-container" id="des-container"></div>
+
+  <div class="actions">
+    <button class="action-btn lancer-btn" id="btn-lancer">LANCER !</button>
+    <button class="action-btn oubli-btn" id="btn-oubli">Oublie...</button>
+  </div>
+
+  <div class="resultats">
+    <div id="total"></div>
+    <div id="symboles"></div>
+    <div id="detail"></div>
+    <div id="effet"></div>
+  </div>
+
+<script src="harzadice_core.js"></script>
+<script>
+(function () {
+  const compteurs = {};
+  const derniereSelection = {};
+  COULEURS.forEach(c => {
+    compteurs[c.code] = 0;
+    derniereSelection[c.code] = 0;
+  });
+
+  const desContainer = document.getElementById('des-container');
+  const totalEl = document.getElementById('total');
+  const symbolesEl = document.getElementById('symboles');
+  const detailEl = document.getElementById('detail');
+  const effetEl = document.getElementById('effet');
+  const typeArmeEl = document.getElementById('type-arme');
+  let boutons = {};
+
+  // Création des boutons de dés
+  COULEURS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'de-btn';
+    btn.style.background = c.hex;
+    if (c.code === 'O') btn.style.color = '#000';
+    btn.innerHTML = '<span class="libelle">' + c.libelle + '</span><span class="compteur" id="cpt-' + c.code + '">0 dé(s)</span>';
+    btn.addEventListener('click', () => incrementer(c.code));
+    desContainer.appendChild(btn);
+    boutons[c.code] = btn;
+  });
+
+  function incrementer(code) {
+    compteurs[code]++;
+    document.getElementById('cpt-' + code).textContent = compteurs[code] + ' dé(s)';
+  }
+
+  function rafraichirBoutons() {
+    COULEURS.forEach(c => {
+      document.getElementById('cpt-' + c.code).textContent = compteurs[c.code] + ' dé(s)';
+    });
+  }
+
+  function effacerResultats() {
+    totalEl.textContent = '';
+    symbolesEl.textContent = '';
+    detailEl.textContent = '';
+    effetEl.textContent = '';
+    effetEl.className = '';
+  }
+
+  document.getElementById('btn-oubli').addEventListener('click', function () {
+    COULEURS.forEach(c => { compteurs[c.code] = 0; });
+    rafraichirBoutons();
+    effacerResultats();
+  });
+
+  document.getElementById('btn-lancer').addEventListener('click', function () {
+    let selection = {};
+    COULEURS.forEach(c => { selection[c.code] = compteurs[c.code]; });
+    let totalSelection = COULEURS.reduce((s, c) => s + selection[c.code], 0);
+    const aDerniere = COULEURS.some(c => derniereSelection[c.code] > 0);
+
+    if (totalSelection === 0 && !aDerniere) {
+      totalEl.textContent = 'Sélectionnez au moins un dé.';
+      effetEl.className = 'effet-erreur';
+      return;
+    }
+
+    if (totalSelection === 0 && aDerniere) {
+      selection = {};
+      COULEURS.forEach(c => { selection[c.code] = derniereSelection[c.code]; });
+    } else {
+      COULEURS.forEach(c => { derniereSelection[c.code] = selection[c.code]; });
+    }
+
+    effacerResultats();
+
+    const typeArme = typeArmeEl.value;
+    const res = lancerSelection(selection, typeArme);
+
+    if (!res.resultats || res.resultats.length === 0) return;
+
+    totalEl.textContent = 'Total = ' + res.total;
+
+    if (res.symbolesRestants && res.symbolesRestants.length > 0) {
+      symbolesEl.textContent = res.symbolesRestants.join(' ');
+    }
+
+    detailEl.textContent = res.resultats.map(r => String(r)).join('  ');
+
+    if (res.partie) {
+      effetEl.textContent = res.partie + ' : ' + res.effet;
+      effetEl.className = res.partie === 'Défenseur' ? 'effet-defenseur' : 'effet-attaquant';
+    }
+  });
+})();
+</script>
+</body>
+</html>
