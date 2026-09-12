@@ -146,6 +146,10 @@ async def r(ctx, *, commande: str):
             message += f"{partie} : {effet}"
 
         await ctx.send(message)
+        try:
+            await ctx.message.delete()
+        except discord.DiscordException:
+            pass
     except Exception as e:
         await ctx.send(f"Erreur : {e}. Veuillez vérifier votre commande.")
 
