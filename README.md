@@ -48,6 +48,8 @@ HarzaDice/
 │   ├── HarzaDice_V4-App.py   # Version 0.4 (dernière, case-insensitive)
 │   ├── HazaDice_V4.py        # Version 0.4 avec variable TOKEN
 │   └── HazaDice_V2.py        # Version 2 (historique)
+├── desktop/             # Application PC (interface graphique Tkinter)
+│   └── HarzaDice.py         # GUI : 5 boutons colorés + type d'arme + LANCER/Oublie
 ├── webapp/              # Webapp HTML/JS + build APK Android (Capacitor)
 │   ├── www/                  # index.html + harzadice_core.js (logique métier)
 │   ├── android/              # Projet Android Capacitor (gradle, manifest, ressources)
@@ -73,6 +75,15 @@ python3 HarzaDice_V4-App.py
 Le token Discord doit être fourni via la variable d'environnement `DISCORD_TOKEN` (voir `bot/HazaDice_V4.py` pour la version avec variable `TOKEN`).
 
 Dans Discord, entrer le type d'arme et le nombre de dés voulu, ex : `C+5R+5N+2B`.
+
+### Application PC (Tkinter)
+
+```bash
+cd desktop
+python3 HarzaDice.py
+```
+
+Clic gauche sur un dé de couleur pour incrémenter le nombre de dés de cette couleur, choisir le type d'arme, puis **LANCER !**. Re-cliquer **LANCER !** relance le même nombre de dés ; **Oublie...** remet à zéro.
 
 ### Webapp (navigateur)
 
