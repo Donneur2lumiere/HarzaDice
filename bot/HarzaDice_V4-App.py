@@ -32,9 +32,11 @@ def lancer_de(des, nombre=1):
     return random.choices(values, weights=weights, k=nombre)
 
 def parser_commande(commande):
-    type_arme = commande.split('+')[0]
+    type_arme = commande.split('+')[0].upper()
+    if type_arme not in ('C', 'M', 'D'):
+        type_arme = 'M'
     pattern = r'(\d+)([RONVB])'
-    matches = re.findall(pattern, commande)
+    matches = [(n, d.upper()) for n, d in re.findall(pattern, commande, re.IGNORECASE)]
     return type_arme, matches
 
 def calculer_somme_et_effet(resultats, type_arme):
