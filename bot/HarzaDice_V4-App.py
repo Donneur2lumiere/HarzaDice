@@ -51,8 +51,8 @@ def parser_commande(commande):
     # L'arme est imposee a 'M' (Moyenne) sur Discord : l'utilisateur ne tape
     # que le declencheur et les des (couleur + nombre), ex: "5R+5N+2B".
     type_arme = 'M'
-    pattern = r'(\d+)([RONVB])'
-    matches = [(n, d.upper()) for n, d in re.findall(pattern, commande, re.IGNORECASE)]
+    pattern = r'(\d*)([RONVB])'
+    matches = [(n or '1', d.upper()) for n, d in re.findall(pattern, commande, re.IGNORECASE)]
     return type_arme, matches
 
 def calculer_somme_et_effet(resultats, type_arme):
