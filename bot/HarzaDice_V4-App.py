@@ -32,6 +32,7 @@ MESSAGES_AMBIANCE = {
     371397762673278977: "Avec (jet) peu on dire qu’elle couche avec leMJ ?",
     1212016821369315369: "Le Max s’offre au minimum (jet) Honteux !",
     1164164874130178138: "L’impitoyable tueur de cochon sort (jet) Vengeance !!!",
+    690544117343715329: "Le Grand Architecte de l’Univers (jet)",
 }
 
 def lancer_de(des, nombre=1):
