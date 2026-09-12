@@ -1,0 +1,64 @@
+# === Secrets / keystore - NE JAMAIS COMMITTER ===
+*.keystore
+*.jks
+*.key
+*.p12
+keystore.properties
+.env
+config.py
+secrets.*
+local.properties
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# === Node.js / webapp ===
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# === Fichiers temporaires éditeur ===
+*.swp
+*.swo
+*.kate-swp
+*~
+
+# === Build APK / Android ===
+*.apk
+*.aab
+*.aar
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+build/
+.gradle/
+dist/
+
+# === Android Studio / IDE ===
+.idea/
+*.iml
+captures/
+.navigation/
+.cxx/
+externalNativeBuild/
+
+# === Gradle ===
+.gradle/
+
+# === Logs ===
+*.log
+
+# === Capacitor générés ===
+webapp/android/app/src/main/assets/public
+webapp/android/app/src/main/assets/capacitor.config.json
+webapp/android/app/src/main/assets/capacitor.plugins.json
+webapp/android/app/src/main/res/xml/config.xml
+webapp/android/capacitor-cordova-android-plugins

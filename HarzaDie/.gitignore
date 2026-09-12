@@ -1,0 +1,28 @@
+__pycache__/
+*.pyc
+*.pyo
+
+# Secrets / keystore - NE JAMAIS COMMITTER
+*.keystore
+*.jks
+*.key
+*.p12
+.env
+config.py
+secrets.*
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers temporaires éditeur (Kate, vim, etc.)
+*.swp
+*.swo
+*.kate-swp
+*~
+
+# Build APK
+build/
+dist/
+*.apk
