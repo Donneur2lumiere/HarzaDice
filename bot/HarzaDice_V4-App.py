@@ -17,7 +17,7 @@ CAS4 = 'Chute -1🎲, & -1 ‬ pour se relever, -1🎲 -1 ‬ sup pour 2M'
 CAS5 = 'Se blesse ⚄4, C 1M 1*Đ, 2M D 2*Đ'
 CAS6 = 'Perte de doigt, -1🎲 Permanent'
 CAS6D = 'Le projectile rebondit Blessure T2 ⚄4, Hémoragie = Σ☠ ou Σ⛤'
-CAS7 = 'S'assomme = fin du combat pour vous'
+CAS7 = "S'assomme = fin du combat pour vous"
 
 def lancer_de(des, nombre=1):
     des_probas = {
