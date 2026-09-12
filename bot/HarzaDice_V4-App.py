@@ -17,7 +17,22 @@ CAS4 = 'Chute -1🎲, & -1 ‬ pour se relever, -1🎲 -1 ‬ sup pour 2M'
 CAS5 = 'Se blesse ⚄4, C 1M 1*Đ, 2M D 2*Đ'
 CAS6 = 'Perte de doigt, -1🎲 Permanent'
 CAS6D = 'Le projectile rebondit Blessure T2 ⚄4, Hémoragie = Σ☠ ou Σ⛤'
-CAS7 = 'S'assomme = fin du combat pour vous'
+CAS7 = "S'assomme = fin du combat pour vous"
+
+MESSAGES_AMBIANCE = {
+    671409208373280788: "Hackeurman vient de nouveau frapper avec un retantissant (jet)",
+    742676044112330813: "Avec (jet) ce zozo vas encore chouiner",
+    1094258141245489152: "La ptite salope de Masskor a encore tout déglingué avec (jet)",
+    1333027720333889660: "Hadrien a obtenu (jet) mais il a surement triché",
+    556759904967458816: "Sa grandeur a de nouveau obtenu (jet)",
+    700716543822004224: "Bouc sort de sa barbe au moins (jet) il n’est pas en forme.",
+    671401755577155584: "Sournoisement Washrog glisse (jet) c’est incroyable",
+    600405837135085569: "D’un décalage temporel sort (jet)",
+    220302752985776128: "Et paf (jet) les orks sont pourtant interdit ici !",
+    371397762673278977: "Avec (jet) peu on dire qu’elle couche avec leMJ ?",
+    1212016821369315369: "Le Max s’offre au minimum (jet) Honteux !",
+    1164164874130178138: "L’impitoyable tueur de cochon sort (jet) Vengeance !!!",
+}
 
 def lancer_de(des, nombre=1):
     des_probas = {
@@ -32,9 +47,11 @@ def lancer_de(des, nombre=1):
     return random.choices(values, weights=weights, k=nombre)
 
 def parser_commande(commande):
-    type_arme = commande.split('+')[0]
+    # L'arme est imposee a 'M' (Moyenne) sur Discord : l'utilisateur ne tape
+    # que le declencheur et les des (couleur + nombre), ex: "5R+5N+2B".
+    type_arme = 'M'
     pattern = r'(\d+)([RONVB])'
-    matches = re.findall(pattern, commande)
+    matches = [(n, d.upper()) for n, d in re.findall(pattern, commande, re.IGNORECASE)]
     return type_arme, matches
 
 def calculer_somme_et_effet(resultats, type_arme):
@@ -109,20 +126,12 @@ async def r(ctx, *, commande: str):
         total, symboles_restants, effet, partie = calculer_somme_et_effet(resultats, type_arme)
         symboles_restants_str = ''.join(str(s) for s in symboles_restants)
 
-        # Messages personnalisés en fonction du nom d'utilisateur
         username = ctx.author.display_name
-        if username == "Blockyaward":
-            message = f"Le grand {username} a lancé {commande}\n"
-        elif username == "Lightbringer":
-            message = f"Le Grand Architecte de l'Univers  {username} a lancé {commande}\n"
-        elif username == "ʎℓ'ɐɹɹɐʞǝ ʎℓ":
-            message = f"Le beau gosse (de loin)   {username} a lancé {commande}\n"
-        elif username == "Karmouna00":
-            message = f"Le clochard   {username} a lancé {commande}\n"
-        elif username == "esprit-fetide":
-            message = f"{username} au cerveau mou, a lancé {commande}\n"
-        else:
+        message = MESSAGES_AMBIANCE.get(ctx.author.id)
+        if message is None:
             message = f"{username} a lancé {commande}\n"
+        else:
+            message = message.replace("(jet)", commande) + "\n"
 
         if symboles_restants:
             message += f"Total = {total} & {symboles_restants_str}     :     {resultats}\n"
