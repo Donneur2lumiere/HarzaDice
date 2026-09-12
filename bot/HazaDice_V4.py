@@ -38,9 +38,9 @@ def lancer_de(des, nombre=1):
     return random.choices(values, weights=weights, k=nombre)
 
 def parser_commande(commande):
-    type_arme = commande.split('+')[0].upper()
-    if type_arme not in ('C', 'M', 'D'):
-        type_arme = 'M'
+    # L'arme est imposee a 'M' (Moyenne) sur Discord : l'utilisateur ne tape
+    # que le declencheur et les des (couleur + nombre), ex: "5R+5N+2B".
+    type_arme = 'M'
     pattern = r'(\d+)([RONVB])'
     matches = [(n, d.upper()) for n, d in re.findall(pattern, commande, re.IGNORECASE)]
     return type_arme, matches
