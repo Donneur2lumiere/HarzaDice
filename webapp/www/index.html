@@ -67,6 +67,26 @@
   .cadre-telephone.plein {
     width: 100%;
     height: calc(100vh - 50px);
+    flex-direction: row;
+  }
+  .plein .contenu {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .plein .zone-gauche {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 100%;
+    padding-right: 8px;
+  }
+  .plein .zone-droite {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    padding-left: 8px;
+    border-left: 1px solid #333;
   }
 
   /* === Contenu === */
@@ -102,9 +122,13 @@
   .zone-gauche {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
   .portrait .zone-gauche { height: 78%; }
+  /* Portrait : dés réduits, arme et actions agrandis (12:24:12) */
+  .portrait .barre-arme { flex: 12 1 0; }
+  .portrait .des-container { flex: 24 1 0; max-height: none; }
+  .portrait .actions { flex: 12 1 0; }
 
   /* === Sélecteur d'arme : boutons radio poussoir === */
   .barre-arme {
@@ -147,8 +171,7 @@
     align-items: stretch;
     min-height: 0;
   }
-  .paysage .des-container { flex-wrap: wrap; }
-  .portrait .des-container { flex: 1; max-height: 45%; }
+  .paysage .des-container, .plein .des-container { flex-wrap: wrap; }
   .de-btn {
     flex: 1;
     border: none;
@@ -206,25 +229,28 @@
     text-align: center;
     padding: 6px 8px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   #total {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
     margin-bottom: 2px;
   }
   #symboles {
-    font-size: 18px;
+    font-size: 36px;
     margin-bottom: 2px;
   }
   #detail {
-    font-size: 14px;
+    font-size: 28px;
     color: #bbb;
     word-wrap: break-word;
     margin-bottom: 4px;
     line-height: 1.4;
   }
   #effet {
-    font-size: 12px;
+    font-size: 24px;
     font-weight: bold;
     word-wrap: break-word;
     line-height: 1.3;
