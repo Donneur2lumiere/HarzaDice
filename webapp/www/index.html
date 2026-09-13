@@ -39,11 +39,12 @@
   }
   .mode-btn.actif { background: #16a085; border-color: #16a085; }
 
-  /* === Cadre téléphone (simulation) === */
+  /* === Cadre téléphone : fin en haut/côtés, épais en bas === */
   .cadre-telephone {
     background: #1a1a1a;
-    border: 4px solid #444;
-    border-radius: 16px;
+    border: 2px solid #444;
+    border-bottom: 40px solid #444;
+    border-radius: 8px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.6);
     display: flex;
     flex-direction: column;
@@ -68,12 +69,13 @@
     height: calc(100vh - 50px);
   }
 
-  /* === Contenu du téléphone === */
+  /* === Contenu === */
   .contenu {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 10px;
+    padding: 8px;
+    padding-bottom: 4px;
     overflow: hidden;
   }
   .paysage .contenu {
@@ -94,35 +96,58 @@
     border-left: 1px solid #333;
   }
 
-  .barre-arme {
+  /* === Zone de commandes (arme + dés + actions) = >=75% hauteur === */
+  .zone-gauche {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .barre-arme label { font-size: 14px; font-weight: bold; }
-  .barre-arme select {
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #555;
-    background: #2c2c2c;
-    color: #fff;
-    font-size: 14px;
+    flex-direction: column;
+    height: 78%;
+    justify-content: space-between;
   }
 
+  /* === Sélecteur d'arme : boutons radio poussoir === */
+  .barre-arme {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    flex: 0 1 auto;
+  }
+  .arme-btn {
+    flex: 1;
+    min-height: 60px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    background: #2c2c2c;
+    color: #bbb;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .arme-btn:active { transform: scale(0.97); }
+  /* État enfoncé (sélectionné) : couleur vive */
+  .arme-btn.actif {
+    border-color: #16a085;
+    background: #16a085;
+    color: #fff;
+  }
+
+  /* === Dés === */
   .des-container {
     display: flex;
     gap: 4px;
-    margin-bottom: 8px;
-    flex-shrink: 0;
+    flex: 1;
+    align-items: stretch;
+    min-height: 0;
   }
   .paysage .des-container { flex-wrap: wrap; }
   .de-btn {
     flex: 1;
-    min-height: 72px;
     border: none;
     border-radius: 8px;
     color: #fff;
@@ -142,19 +167,20 @@
   .de-btn .libelle { font-size: 12px; }
   .de-btn .compteur { font-size: 18px; font-weight: bold; }
 
+  /* === Actions LANCER / Oublie === */
   .actions {
     display: flex;
     gap: 4px;
-    margin-bottom: 8px;
     flex-shrink: 0;
+    flex: 0 1 auto;
   }
   .action-btn {
     flex: 1;
-    min-height: 46px;
+    min-height: 60px;
     border: none;
     border-radius: 8px;
     color: #fff;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -165,46 +191,54 @@
   .lancer-btn { background: #16a085; }
   .oubli-btn { background: #7f8c8d; }
 
+  /* === Zone résultats (<=22%) === */
+  .zone-droite {
+    display: flex;
+    flex-direction: column;
+    height: 18%;
+    flex-shrink: 0;
+  }
   .resultats {
     flex: 1;
     text-align: center;
-    padding: 12px 8px;
+    padding: 6px 8px;
     overflow-y: auto;
   }
   #total {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
   #symboles {
-    font-size: 22px;
-    margin-bottom: 4px;
+    font-size: 18px;
+    margin-bottom: 2px;
   }
   #detail {
-    font-size: 16px;
+    font-size: 14px;
     color: #bbb;
     word-wrap: break-word;
-    margin-bottom: 8px;
-    line-height: 1.6;
+    margin-bottom: 4px;
+    line-height: 1.4;
   }
   #effet {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     word-wrap: break-word;
-    line-height: 1.4;
+    line-height: 1.3;
   }
   .effet-defenseur { color: #27ae60; }
   .effet-attaquant { color: #e74c3c; }
   .effet-erreur { color: #f39c12; }
 
-  /* Sur mobile réel, on masque la barre de mode (le viewport gère l'orientation) */
+  /* Sur mobile réel, on masque la barre de mode */
   @media (max-width: 500px) {
     .barre-mode { display: none; }
     .cadre-telephone {
       width: 100% !important;
       height: 100vh !important;
-      border: none;
-      border-radius: 0;
+      border: 2px solid #444;
+      border-bottom: 40px solid #444;
+      border-radius: 8px;
     }
   }
 </style>
@@ -219,14 +253,7 @@
   <div class="cadre-telephone portrait" id="telephone">
     <div class="contenu">
       <div class="zone-gauche">
-        <div class="barre-arme">
-          <label for="type-arme">Type d'arme :</label>
-          <select id="type-arme">
-            <option value="C">C (Courte)</option>
-            <option value="M" selected>M (Moyenne)</option>
-            <option value="D">D (Distante)</option>
-          </select>
-        </div>
+        <div class="barre-arme" id="arme-container"></div>
         <div class="des-container" id="des-container"></div>
         <div class="actions">
           <button class="action-btn lancer-btn" id="btn-lancer">LANCER !</button>
@@ -254,15 +281,38 @@
     derniereSelection[c.code] = 0;
   });
 
+  const armeContainer = document.getElementById('arme-container');
   const desContainer = document.getElementById('des-container');
   const totalEl = document.getElementById('total');
   const symbolesEl = document.getElementById('symboles');
   const detailEl = document.getElementById('detail');
   const effetEl = document.getElementById('effet');
-  const typeArmeEl = document.getElementById('type-arme');
   const telephone = document.getElementById('telephone');
 
-  // Création des boutons de dés
+  let typeArme = 'M'; // arme par défaut
+
+  // === Création des boutons d'arme (radio poussoir) ===
+  const armes = [
+    { code: 'C', libelle: 'Courte' },
+    { code: 'M', libelle: 'Moyenne' },
+    { code: 'D', libelle: 'Distante' },
+  ];
+  const armeBoutons = {};
+  armes.forEach(a => {
+    const btn = document.createElement('button');
+    btn.className = 'arme-btn' + (a.code === 'M' ? ' actif' : '');
+    btn.textContent = a.libelle;
+    btn.dataset.arme = a.code;
+    btn.addEventListener('click', function () {
+      typeArme = a.code;
+      Object.values(armeBoutons).forEach(b => b.classList.remove('actif'));
+      this.classList.add('actif');
+    });
+    armeContainer.appendChild(btn);
+    armeBoutons[a.code] = btn;
+  });
+
+  // === Création des boutons de dés ===
   COULEURS.forEach(c => {
     const btn = document.createElement('button');
     btn.className = 'de-btn';
@@ -292,7 +342,7 @@
     effetEl.className = '';
   }
 
-  // === Gestion des modes (portrait / paysage / plein écran) ===
+  // === Gestion des modes ===
   document.querySelectorAll('.mode-btn').forEach(b => {
     b.addEventListener('click', function () {
       document.querySelectorAll('.mode-btn').forEach(x => x.classList.remove('actif'));
@@ -324,7 +374,6 @@
       COULEURS.forEach(c => { derniereSelection[c.code] = selection[c.code]; });
     }
     effacerResultats();
-    const typeArme = typeArmeEl.value;
     const res = lancerSelection(selection, typeArme);
     if (!res.resultats || res.resultats.length === 0) return;
     totalEl.textContent = 'Total = ' + res.total;
