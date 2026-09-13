@@ -2,7 +2,7 @@
 
 Special dice for the role-playing game **« Monde »**.
 
-Application permettant de lancer des dés avec des règles personnalisées dans l'univers « Monde ». Trois interfaces coexistent : un **bot Discord** (Python), une **application desktop** (Tkinter), et une **webapp** encapsulable en APK Android via Capacitor.
+Application permettant de lancer des dés avec des règles personnalisées dans l'univers « Monde ». Deux interfaces coexistent : un **bot Discord** (Python, interface CLI) et une **webapp** HTML/JS servant à la fois de version PC (navigateur) et d'APK Android (via Capacitor).
 
 ![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)
 
@@ -48,6 +48,9 @@ HarzaDice/
 │   └── HazaDice.py          # Version 0.4 (de référence, case-insensitive, TOKEN)
 ├── webapp/              # Interface web HTML/JS — version PC (navigateur) + APK Android
 │   ├── www/                  # index.html (UI responsive) + harzadice_core.js (logique métier)
+│   ├── lancer.py             # Lanceur multiplateforme (Win/Linux/macOS) — serveur local + navigateur
+│   ├── lancer.sh             # Raccourci Linux/macOS
+│   ├── lancer.bat            # Raccourci Windows
 │   ├── android/              # Projet Android Capacitor (gradle, manifest, ressources)
 │   ├── capacitor.config.json
 │   ├── cr_webapp.sh          # Script de build release
@@ -74,7 +77,20 @@ Dans Discord, entrer le déclencheur et les dés (couleur + nombre), ex : `!r 5R
 
 ### Interface web / PC (navigateur)
 
-Ouvrir `webapp/www/index.html` dans un navigateur — aucun build requis. Clic sur un dé de couleur pour incrémenter le nombre de dés, choisir le type d'arme, puis **LANCER !**. Re-cliquer **LANCER !** relance le même nombre de dés ; **Oublie...** remet à zéro.
+**Lancement automatisé** (recommandé) — un seul script démarre le serveur local et ouvre le navigateur :
+
+```bash
+cd webapp
+./lancer.sh          # Linux / macOS
+cd webapp
+lancer.bat           # Windows
+```
+
+Le serveur tourne sur `http://localhost:8000`. Un bouton **Quitter** (dans la marge basse du cadre) arrête le serveur et ferme l'onglet. Ctrl+C dans le terminal fonctionne aussi.
+
+**Ouverture manuelle** (sans serveur) : ouvrir `webapp/www/index.html` dans un navigateur — aucun build requis. Attention : ouvrir le fichier directement via `file://` bloque le chargement du JS externe, le mode serveur (`lancer.py`) est préférable.
+
+Clic sur un dé de couleur pour incrémenter le nombre de dés, choisir le type d'arme (boutons radio poussoir), puis **LANCER !**. Re-cliquer **LANCER !** relance le même nombre de dés ; **Oublie...** remet à zéro.
 
 La barre de mode en haut permet de simuler la résolution d'un écran de téléphone : **Portrait** (390×760), **Paysage** (760×390) ou **Plein écran**. Sur mobile réel, cette barre est masquée (le viewport gère l'orientation).
 

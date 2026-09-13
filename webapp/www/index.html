@@ -260,6 +260,29 @@
   .effet-attaquant { color: #e74c3c; }
   .effet-erreur { color: #f39c12; }
 
+  /* === Bouton Quitter dans la marge basse (40px) — visible uniquement en localhost === */
+  .btn-quitter {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 26px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 13px;
+    background: #555;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    z-index: 10;
+  }
+  .btn-quitter:active { background: #e74c3c; }
+  .cadre-telephone { position: relative; }
+
   /* Sur mobile réel, on masque la barre de mode */
   @media (max-width: 500px) {
     .barre-mode { display: none; }
@@ -281,6 +304,7 @@
   </div>
 
   <div class="cadre-telephone portrait" id="telephone">
+    <button class="btn-quitter" id="btn-quitter">Quitter</button>
     <div class="contenu">
       <div class="zone-gauche">
         <div class="barre-arme" id="arme-container"></div>
@@ -316,6 +340,15 @@
   const telephone = document.getElementById('telephone');
 
   let typeArme = 'M'; // arme par défaut
+
+  // === Bouton Quitter : visible uniquement en localhost (PC), invisible sur APK ===
+  const btnQuitter = document.getElementById('btn-quitter');
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    btnQuitter.style.display = 'block';
+    btnQuitter.addEventListener('click', function () {
+      fetch('/quit').then(() => { window.close(); });
+    });
+  }
 
   // === Création des boutons d'arme (radio poussoir) ===
   const armes = [
