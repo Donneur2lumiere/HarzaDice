@@ -45,8 +45,7 @@ Résultat = 10 & ★★ ; Défenseur Cas1 : [ 0,'★', 2, 2, 2, '★', 2, '★',
 ```
 HarzaDice/
 ├── bot/                 # Bot Discord (Python, discord.py) — interface CLI
-│   ├── HazaDice_V4.py        # Version 0.4 (de référence, case-insensitive, TOKEN)
-│   └── HazaDice_V2.py        # Version 2 (historique)
+│   └── HazaDice.py          # Version 0.4 (de référence, case-insensitive, TOKEN)
 ├── webapp/              # Interface web HTML/JS — version PC (navigateur) + APK Android
 │   ├── www/                  # index.html (UI responsive) + harzadice_core.js (logique métier)
 │   ├── android/              # Projet Android Capacitor (gradle, manifest, ressources)
@@ -66,10 +65,10 @@ HarzaDice/
 
 ```bash
 cd bot
-python3 HazaDice_V4.py
+python3 HazaDice.py
 ```
 
-Le token Discord doit être fourni dans la variable `TOKEN` du fichier `bot/HazaDice_V4.py`.
+Le token Discord doit être fourni dans la variable `TOKEN` du fichier `bot/HazaDice.py`.
 
 Dans Discord, entrer le déclencheur et les dés (couleur + nombre), ex : `!r 5R+5N+2B`. L'arme est imposée à `M` (Moyenne) ; une lettre seule vaut 1 dé (`!r n` = 1 Noir). Le message de commande est effacé après le résultat.
 
