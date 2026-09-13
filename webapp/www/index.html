@@ -233,28 +233,29 @@
     flex-direction: column;
     justify-content: center;
   }
-  #total {
-    font-size: 26px;
+  /* Ligne principale : Total = X & symboles  [detail] */
+  #ligne-resultat {
+    font-size: 32px;
     font-weight: bold;
-    margin-bottom: 2px;
-  }
-  #symboles {
-    font-size: 36px;
-    margin-bottom: 2px;
-  }
-  #detail {
-    font-size: 28px;
-    color: #bbb;
-    word-wrap: break-word;
     margin-bottom: 4px;
-    line-height: 1.4;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+  #ligne-resultat .detail-de {
+    font-size: 16px;
+    font-weight: normal;
+    color: #bbb;
   }
   #effet {
-    font-size: 24px;
+    font-size: 16px;
     font-weight: bold;
     word-wrap: break-word;
     line-height: 1.3;
   }
+  /* Portrait : police résultats indépendante et réduite */
+  .portrait #ligne-resultat { font-size: 18px; }
+  .portrait #ligne-resultat .detail-de { font-size: 12px; }
+  .portrait #effet { font-size: 12px; }
   .effet-defenseur { color: #27ae60; }
   .effet-attaquant { color: #e74c3c; }
   .effet-erreur { color: #f39c12; }
@@ -291,9 +292,7 @@
       </div>
       <div class="zone-droite">
         <div class="resultats">
-          <div id="total"></div>
-          <div id="symboles"></div>
-          <div id="detail"></div>
+          <div id="ligne-resultat"></div>
           <div id="effet"></div>
         </div>
       </div>
@@ -312,9 +311,7 @@
 
   const armeContainer = document.getElementById('arme-container');
   const desContainer = document.getElementById('des-container');
-  const totalEl = document.getElementById('total');
-  const symbolesEl = document.getElementById('symboles');
-  const detailEl = document.getElementById('detail');
+  const ligneResultatEl = document.getElementById('ligne-resultat');
   const effetEl = document.getElementById('effet');
   const telephone = document.getElementById('telephone');
 
@@ -364,9 +361,7 @@
   }
 
   function effacerResultats() {
-    totalEl.textContent = '';
-    symbolesEl.textContent = '';
-    detailEl.textContent = '';
+    ligneResultatEl.textContent = '';
     effetEl.textContent = '';
     effetEl.className = '';
   }
@@ -392,7 +387,7 @@
     let totalSelection = COULEURS.reduce((s, c) => s + selection[c.code], 0);
     const aDerniere = COULEURS.some(c => derniereSelection[c.code] > 0);
     if (totalSelection === 0 && !aDerniere) {
-      totalEl.textContent = 'Sélectionnez au moins un dé.';
+      ligneResultatEl.textContent = 'Sélectionnez au moins un dé.';
       effetEl.className = 'effet-erreur';
       return;
     }
@@ -405,11 +400,15 @@
     effacerResultats();
     const res = lancerSelection(selection, typeArme);
     if (!res.resultats || res.resultats.length === 0) return;
-    totalEl.textContent = 'Total = ' + res.total;
+    // Ligne principale : Total = X & ☠  [★ 0 ☠ ☠ 1]
+    let ligne = 'Total = ' + res.total;
     if (res.symbolesRestants && res.symbolesRestants.length > 0) {
-      symbolesEl.textContent = res.symbolesRestants.join(' ');
+      ligne += ' & ' + res.symbolesRestants.join(' ');
     }
-    detailEl.textContent = res.resultats.map(r => String(r)).join('  ');
+    if (res.resultats.length > 0) {
+      ligne += '  <span class="detail-de">[' + res.resultats.map(r => String(r)).join(' ') + ']</span>';
+    }
+    ligneResultatEl.innerHTML = ligne;
     if (res.partie) {
       effetEl.textContent = res.partie + ' : ' + res.effet;
       effetEl.className = res.partie === 'Défenseur' ? 'effet-defenseur' : 'effet-attaquant';
