@@ -85,24 +85,26 @@
   .paysage .zone-gauche {
     display: flex;
     flex-direction: column;
-    width: 45%;
+    width: 60%;
+    height: 100%;
     padding-right: 8px;
   }
   .paysage .zone-droite {
     display: flex;
     flex-direction: column;
     flex: 1;
+    height: 100%;
     padding-left: 8px;
     border-left: 1px solid #333;
   }
 
-  /* === Zone de commandes (arme + dés + actions) = >=75% hauteur === */
+  /* === Zone de commandes (arme + dés + actions) = >=75% hauteur (portrait) === */
   .zone-gauche {
     display: flex;
     flex-direction: column;
-    height: 78%;
     justify-content: space-between;
   }
+  .portrait .zone-gauche { height: 78%; }
 
   /* === Sélecteur d'arme : boutons radio poussoir === */
   .barre-arme {
@@ -146,6 +148,7 @@
     min-height: 0;
   }
   .paysage .des-container { flex-wrap: wrap; }
+  .portrait .des-container { flex: 1; max-height: 45%; }
   .de-btn {
     flex: 1;
     border: none;
@@ -191,13 +194,13 @@
   .lancer-btn { background: #16a085; }
   .oubli-btn { background: #7f8c8d; }
 
-  /* === Zone résultats (<=22%) === */
+  /* === Zone résultats (<=22%) (portrait) === */
   .zone-droite {
     display: flex;
     flex-direction: column;
-    height: 18%;
     flex-shrink: 0;
   }
+  .portrait .zone-droite { height: 18%; }
   .resultats {
     flex: 1;
     text-align: center;
