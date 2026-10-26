@@ -283,15 +283,113 @@
   .btn-quitter:active { background: #e74c3c; }
   .cadre-telephone { position: relative; }
 
-  /* === Affichage de la version en bas de l'écran === */
+  /* === Bouton Version et Modal Popup du D16 === */
   .label-version {
     text-align: center;
     font-size: 11px;
-    color: #888;
+    color: #aaa;
     padding-top: 4px;
     user-select: none;
     flex-shrink: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.15s;
+    background: none;
+    border: none;
+    width: 100%;
   }
+  .label-version:hover { color: #fff; }
+  .label-version:active { color: #16a085; }
+
+  /* Modal Popup */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 10px;
+  }
+  .modal-overlay.actif { display: flex; }
+  .modal-card {
+    background: #1e1e1e;
+    border: 2px solid #555;
+    border-radius: 10px;
+    max-width: 380px;
+    width: 100%;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+  }
+  .modal-header {
+    background: #2a2a2a;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #444;
+    color: #eee;
+  }
+  .modal-body {
+    padding: 8px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .table-d16 {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 12px;
+  }
+  .table-d16 th, .table-d16 td {
+    padding: 4px 2px;
+    border: 1px solid #333;
+  }
+  .table-d16 th {
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+  }
+  .th-rang { background: #222; width: 34px; }
+  .th-r { background: #c0392b; }
+  .th-o { background: #e67e22; color: #000; }
+  .th-n { background: #2c2c2c; }
+  .th-v { background: #27ae60; }
+  .th-b { background: #2980b9; }
+
+  .td-etoile {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .r-bg { background: rgba(192, 57, 43, 0.45); }
+  .o-bg { background: rgba(230, 126, 34, 0.45); }
+  .n-bg { background: rgba(44, 44, 44, 0.65); }
+  .v-bg { background: rgba(39, 174, 96, 0.45); }
+  .b-bg { background: rgba(41, 128, 185, 0.45); }
+  .zero-bg { background: rgba(255, 255, 200, 0.15); color: #ccc; }
+
+  .modal-footer {
+    padding: 8px 12px;
+    background: #2a2a2a;
+    border-top: 1px solid #444;
+    text-align: center;
+  }
+  .btn-modal-ok {
+    background: #16a085;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-modal-ok:active { background: #138d75; }
 
   /* Sur mobile réel, on masque la barre de mode */
   @media (max-width: 500px) {
@@ -329,7 +427,49 @@
           <div id="ligne-resultat"></div>
           <div id="effet"></div>
         </div>
-        <div class="label-version">Version 0.9</div>
+        <button class="label-version" id="btn-version" title="Voir la table des dés">Version 0.9 ℹ️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Popup Table D16 -->
+  <div class="modal-overlay" id="modal-d16">
+    <div class="modal-card">
+      <div class="modal-header">Table de définition du D16</div>
+      <div class="modal-body">
+        <table class="table-d16">
+          <thead>
+            <tr>
+              <th class="th-rang">Rang</th>
+              <th class="th-r">ROUGE</th>
+              <th class="th-o">ORANGE</th>
+              <th class="th-n">NOIR</th>
+              <th class="th-v">VERT</th>
+              <th class="th-b">BLEU</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td class="r-bg td-etoile">★</td><td class="o-bg td-etoile">★</td><td class="n-bg td-etoile">★</td><td class="v-bg td-etoile">★</td><td class="b-bg td-etoile">★</td></tr>
+            <tr><td>2</td><td class="r-bg">2</td><td class="o-bg">2</td><td class="n-bg">2</td><td class="v-bg td-etoile">★</td><td class="b-bg td-etoile">★</td></tr>
+            <tr><td>3</td><td class="r-bg">2</td><td class="o-bg">2</td><td class="n-bg">2</td><td class="v-bg">2</td><td class="b-bg td-etoile">★</td></tr>
+            <tr><td>4</td><td class="r-bg">1</td><td class="o-bg">1</td><td class="n-bg">2</td><td class="v-bg">2</td><td class="b-bg">2</td></tr>
+            <tr><td>5</td><td class="r-bg">1</td><td class="o-bg">1</td><td class="n-bg">1</td><td class="v-bg">2</td><td class="b-bg">2</td></tr>
+            <tr><td>6</td><td class="zero-bg">0</td><td class="o-bg">1</td><td class="n-bg">1</td><td class="v-bg">1</td><td class="b-bg">2</td></tr>
+            <tr><td>7</td><td class="zero-bg">0</td><td class="o-bg">1</td><td class="n-bg">1</td><td class="v-bg">1</td><td class="b-bg">2</td></tr>
+            <tr><td>8</td><td class="zero-bg">0</td><td class="o-bg">1</td><td class="n-bg">1</td><td class="v-bg">1</td><td class="b-bg">2</td></tr>
+            <tr><td>9</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="n-bg">1</td><td class="v-bg">1</td><td class="b-bg">1</td></tr>
+            <tr><td>10</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="n-bg">1</td><td class="v-bg">1</td><td class="b-bg">1</td></tr>
+            <tr><td>11</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="b-bg">1</td></tr>
+            <tr><td>12</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="b-bg">1</td></tr>
+            <tr><td>13</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td></tr>
+            <tr><td>14</td><td class="r-bg">☠</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td></tr>
+            <tr><td>15</td><td class="r-bg">☠</td><td class="o-bg">☠</td><td class="zero-bg">0</td><td class="zero-bg">0</td><td class="zero-bg">0</td></tr>
+            <tr><td>16</td><td class="r-bg">☠</td><td class="o-bg">☠</td><td class="n-bg">☠</td><td class="v-bg">☠</td><td class="b-bg">☠</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-ok" id="btn-modal-ok">OK</button>
       </div>
     </div>
   </div>
@@ -456,6 +596,25 @@
     if (res.partie) {
       effetEl.textContent = res.partie + ' : ' + res.effet;
       effetEl.className = res.partie === 'Défenseur' ? 'effet-defenseur' : 'effet-attaquant';
+    }
+  });
+
+  // === Modal Table D16 (Ouverture / Fermeture) ===
+  const modalD16 = document.getElementById('modal-d16');
+  const btnVersion = document.getElementById('btn-version');
+  const btnModalOk = document.getElementById('btn-modal-ok');
+
+  btnVersion.addEventListener('click', function () {
+    modalD16.classList.add('actif');
+  });
+
+  btnModalOk.addEventListener('click', function () {
+    modalD16.classList.remove('actif');
+  });
+
+  modalD16.addEventListener('click', function (e) {
+    if (e.target === modalD16) {
+      modalD16.classList.remove('actif');
     }
   });
 })();
