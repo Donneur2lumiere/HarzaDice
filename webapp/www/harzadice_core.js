@@ -9,9 +9,9 @@ const DE_FUMBLE = '\u2620';
 // Probabilités par couleur (identiques à harzadice_core.py)
 const DES_PROBAS = {
   R: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [1, 3, 8, 2, 2] },
-  O: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [1, 1, 7, 5, 2] },
+  O: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [1, 2, 6, 5, 2] },
   N: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [1, 1, 6, 5, 3] },
-  V: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [1, 1, 5, 5, 4] },
+  V: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [2, 1, 4, 5, 4] },
   B: { values: [DE_FIN, DE_FUMBLE, 0, 1, 2], weights: [3, 1, 3, 4, 5] },
 };
 
