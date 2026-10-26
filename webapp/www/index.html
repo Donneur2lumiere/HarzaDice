@@ -283,6 +283,16 @@
   .btn-quitter:active { background: #e74c3c; }
   .cadre-telephone { position: relative; }
 
+  /* === Affichage de la version en bas de l'écran === */
+  .label-version {
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    padding-top: 4px;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
   /* Sur mobile réel, on masque la barre de mode */
   @media (max-width: 500px) {
     .barre-mode { display: none; }
@@ -319,6 +329,7 @@
           <div id="ligne-resultat"></div>
           <div id="effet"></div>
         </div>
+        <div class="label-version">Version 0.9</div>
       </div>
     </div>
   </div>
