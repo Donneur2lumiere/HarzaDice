@@ -42,8 +42,8 @@ MESSAGES_AMBIANCE = {
 
 def lancer_de(des, nombre=1):
     des_probas = {
-        'R': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [1, 3, 8, 3, 1]},
-        'O': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [1, 2, 6, 6, 1]},
+        'R': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [1, 3, 7, 4, 1]},
+        'O': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [1, 2, 7, 5, 1]},
         'N': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [1, 1, 6, 6, 2]},
         'V': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [2, 1, 4, 6, 3]},
         'B': {'values': ['⛤', '☠', 0, 1, 2], 'weights': [3, 1, 3, 4, 5]}
